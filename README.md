@@ -4,6 +4,10 @@
 
 An implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) in Rust WebAssembly.
 
+## Prerequisites
+
+Install [wasm-pack](https://github.com/rustwasm/wasm-pack).
+
 ## Compile
 
 ```bash
