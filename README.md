@@ -4,6 +4,8 @@
 
 An implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) in Rust WebAssembly.
 
+![Image from Conway's Game of Life](./images/output.png)
+
 ## Prerequisites
 
 Install [wasm-pack](https://github.com/rustwasm/wasm-pack).
@@ -23,4 +25,4 @@ python -m SimpleHTTPServer
 python3 -m http.server
 ```
 
-Run in a browser at [localhost:8000](localhost:8000).
+Run in a browser at [http://localhost:8000](http://localhost:8000).
