@@ -1,9 +1,6 @@
 // A WebAssembly implementation of Conway's Game of Life.
 
-use gloo_render::{request_animation_frame, AnimationFrame};
-use wasm_bindgen::prelude::*;
-use wasm_bindgen::JsCast;
-use web_sys::CanvasRenderingContext2d;
+use wasm_bindgen::{prelude::*, JsCast};
 
 const NUM_CELLS_HORIZONTAL: usize = 100;
 const NUM_CELLS_VERTICAL: usize = 100;
@@ -23,7 +20,7 @@ struct Cell {
 }
 
 impl Cell {
-    pub fn draw(&self, context: &CanvasRenderingContext2d) {
+    pub fn draw(&self, context: &web_sys::CanvasRenderingContext2d) {
         match self.state {
             CellState::Live => {
                 context.set_fill_style(&JsValue::from_str("rgb(0,0,0)"));
@@ -39,8 +36,8 @@ impl Cell {
 
 struct Data {
     cells: Vec<Cell>,
-    context: CanvasRenderingContext2d,
-    request_animation_frame_handle: AnimationFrame,
+    context: web_sys::CanvasRenderingContext2d,
+    request_animation_frame_handle: gloo_render::AnimationFrame,
     timestamp: f64,
 }
 
@@ -61,7 +58,7 @@ pub fn main() -> Result<(), JsValue> {
     let context = canvas
         .get_context("2d")?
         .expect("should have 2d context")
-        .dyn_into::<CanvasRenderingContext2d>()?;
+        .dyn_into::<web_sys::CanvasRenderingContext2d>()?;
 
     let mut cells = Vec::with_capacity(NUM_CELLS_HORIZONTAL * NUM_CELLS_VERTICAL);
     for i in 0..NUM_CELLS_HORIZONTAL {
@@ -79,7 +76,7 @@ pub fn main() -> Result<(), JsValue> {
     }
     draw(&cells, &context);
 
-    let request_animation_frame_handle = request_animation_frame(on_animation_frame);
+    let request_animation_frame_handle = gloo_render::request_animation_frame(on_animation_frame);
 
     unsafe {
         DATA = Some(Data {
@@ -93,7 +90,7 @@ pub fn main() -> Result<(), JsValue> {
     Ok(())
 }
 
-fn draw(cells: &[Cell], context: &CanvasRenderingContext2d) {
+fn draw(cells: &[Cell], context: &web_sys::CanvasRenderingContext2d) {
     cells.iter().for_each(|cell| cell.draw(context));
 }
 
@@ -148,5 +145,5 @@ fn on_animation_frame(timestamp: f64) {
         draw(&data.cells, &data.context);
     }
 
-    data.request_animation_frame_handle = request_animation_frame(on_animation_frame);
+    data.request_animation_frame_handle = gloo_render::request_animation_frame(on_animation_frame);
 }
